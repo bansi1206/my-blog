@@ -1,9 +1,26 @@
-import { getPrisma, getSessionUser } from "@/config";
+import { getPrisma, getSessionUser } from '@/config';
 
-import { NextRequest } from "next/server";
+import { NextRequest } from 'next/server';
 
-export async function GET() {
-  const res = await getPrisma().post.findMany();
+export async function GET(request: NextRequest) {
+  const keyword = request.nextUrl.searchParams.get('keyword');
+  const search = {
+    ...(keyword
+      ? {
+          title: {
+            contains: keyword,
+          },
+        }
+      : {}),
+  };
+  const res = await getPrisma().post.findMany({
+    where: {
+      AND: [{ ...search }],
+    },
+    include: {
+      user: true,
+    },
+  });
 
   return Response.json(res);
 }

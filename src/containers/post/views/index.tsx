@@ -24,6 +24,9 @@ type Props = {
 };
 
 export const Post: React.FC<Props> = ({ post }) => {
+  console.log('--------------------------------------------------------')
+  console.log('post', post)
+  console.log('--------------------------------------------------------')
   return (
     // <div>
     //   <div className='container'>
@@ -44,14 +47,14 @@ export const Post: React.FC<Props> = ({ post }) => {
     <div>
       <div className="container flex flex-col items-center mt-[108px]">
         <div className="rounded bg-[#283A61] inline-block py-1 px-4 text-[#fff]">
-          {post?.post.category}
+          {post?.post?.category}
         </div>
         <h1 className="max-w-[800px] text-5xl font-bold mt-3 mb-4">
-          {post?.post.title}
+          {post?.post?.title}
         </h1>
-        <p className="text-sm text-[#515151] mb-3">{post?.post.createdAt}</p>
+        <p className="text-sm text-[#515151] mb-3">{post?.post?.createdAt}</p>
         <img
-          src={`${post?.post.image}`}
+          src={`${post?.post?.image}`}
           alt="post-image"
           className="w-1/2 h-64 rounded shadow-primary"
         />
