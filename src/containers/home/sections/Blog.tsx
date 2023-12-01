@@ -24,7 +24,7 @@ export const Blog: React.FC<Props> = ({ posts }) => {
       <div className="container">
         <div className="grid grid-cols-3 gap-4">
           {map(posts, (post) => (
-            <Link href="#!" className="no-underline text-[#000]">
+            <Link key={post?.id} href={`/post/${post?.id}`} className="no-underline text-[#000]">
               <div className="w-[510px] flex flex-col gap-y-5">
                 <img
                   src="https://images.pexels.com/photos/36744/agriculture-arable-clouds-countryside.jpg?auto=compress&cs=tinysrgb&w=1600"
