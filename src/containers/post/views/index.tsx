@@ -3,67 +3,82 @@
 import Link from "next/link";
 import { Avatar, Button } from "antd";
 import { Popular, Subscribe, Recent } from "@/components";
+import { formatDate } from "@/utils";
+import { KeepReading } from "@/components";
 
 type Post = {
-  user_id: number;
-  title: string;
-  image: string;
-  createdAt: string;
-  id: number;
-  content: string;
+  id: string;
+  userId: string;
+  thumbnail: string;
   category: string;
+  title: string;
+  content: string;
+  createdAt: string;
   updatedAt: string;
+  user: User;
+};
+
+type User = {
+  id: string;
+  name: string;
+  email: string;
+  emailVerified: any;
+  image: string;
+  role: string;
+  status: string;
+  createdAt: string;
+  updatedAt: string;
+  bio: string;
 };
 
 type Props = {
-  post?: {
-    success: boolean;
-    message: string;
-    post: Post;
-  };
+  post?: Post;
 };
 
 export const Post: React.FC<Props> = ({ post }) => {
-  console.log('--------------------------------------------------------')
-  console.log('post', post)
-  console.log('--------------------------------------------------------')
   return (
-    // <div>
-    //   <div className='container'>
-    //     <div className='flex flex-col items-center text-5xl'>
-    //       <img src={post?.blog.photo_url} alt='' />
-    //       <h1>{post?.blog.title}</h1>
-    //     </div>
-    //     <div className='meta-data'>
-    //       <Link href={'#!'} className='decoration-cyan-500'>
-    //         {post?.blog.category}
-    //       </Link>
-    //     </div>
-    //     <div
-    //       dangerouslySetInnerHTML={{ __html: post?.blog?.content_html || '' }}
-    //     ></div>
-    //   </div>
-    // </div>
     <div>
-      <div className="container flex flex-col items-center mt-[108px]">
-        <div className="rounded bg-[#283A61] inline-block py-1 px-4 text-[#fff]">
-          {post?.post?.category}
+      <div className="container mt-[108px]">
+        <div className="max-w-[800px] m-auto">
+          <div className="rounded bg-[#283A61] inline-block py-1 px-4 text-[#FFFFFFD9]">
+            {post?.category}
+          </div>
+          <h1 className="text-5xl font-bold mt-3 mb-4">{post?.title}</h1>
+          <p className="text-sm text-[#515151] mb-3">
+            {formatDate(post?.createdAt)}
+          </p>
+          <img
+            src={`${post?.thumbnail}`}
+            alt="post-image"
+            className="rounded-[5px] h-[278px] w-full shadow-post bg-[#7f7f7f] bg-no-repeat bg-cover"
+          />
+          <div className="flex items-center gap-[14px] mt-[20px]">
+            <Avatar
+              src={`${post?.user.image}`}
+              alt="avatar"
+              className="bg-cover bg-no-repeat rounded-[387px] w-[42px] h-[42px]"
+            />
+            <p className="text-sm font-bold text-[#000]">{post?.user.name}</p>
+          </div>
+          <div
+            className="text-base font-normal line-clamp-3 font-roboto text-[#434343] mt-10"
+            dangerouslySetInnerHTML={{ __html: post?.content || "" }}
+          ></div>
+          <KeepReading post={post} />
+          <div className="flex items-center gap-[28px] mt-[20px] max-w-[800px] mb-[104px] rounded-[5px] bg-[#F5F5F5] border-[#DDD] border-[1px] border-solid py-[44px] px-[31px] cursor-pointer">
+            <Avatar
+              src={`${post?.user.image}`}
+              alt="avatar"
+              className="bg-cover bg-no-repeat rounded-[387px] w-[150px] h-[150px]"
+            />
+            <div>
+              <div className="text-2xl font-bold text-[#000]">
+                Written by {post?.user.name}
+              </div>
+              <div className="max-w-[555px]">{post?.user.bio}</div>
+            </div>
+          </div>
         </div>
-        <h1 className="max-w-[800px] text-5xl font-bold mt-3 mb-4">
-          {post?.post?.title}
-        </h1>
-        <p className="text-sm text-[#515151] mb-3">{post?.post?.createdAt}</p>
-        <img
-          src={`${post?.post?.image}`}
-          alt="post-image"
-          className="w-1/2 h-64 rounded shadow-primary"
-        />
-        <div className="flex mt-[30px] items-center">
-          <Avatar src="https://kenh14cdn.com/203336854389633024/2021/8/15/photo-1-162903403632824547336.jpg" />
-          <div>Thang Le</div>
-        </div>
-        <div>content</div>
-        <div className="mb-6">Keep reading</div>
         <div className="max-lg:flex max-lg:flex-col max-lg:gap-6 max-lg:ml-0 lg:flex justify-between mb-[147px] lg:gap-20">
           <Subscribe />
           <Popular />

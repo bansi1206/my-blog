@@ -1,5 +1,5 @@
-import { Post } from '@/containers';
-import axios from 'axios';
+import { Post } from "@/containers";
+import axios from "axios";
 
 const getPostDetail = async (slug: string) => {
   try {
@@ -15,9 +15,9 @@ export default async function ScreenPost({
 }: {
   params: { slug: string };
 }) {
-  console.log('--------------------------------------------------------')
-  console.log('params', params)
-  console.log('--------------------------------------------------------')
+  console.log("--------------------------------------------------------");
+  console.log("params", params);
+  console.log("--------------------------------------------------------");
   const post = await getPostDetail(params.slug);
 
   return <Post post={post} />;

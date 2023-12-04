@@ -1,9 +1,11 @@
-import { getPrisma, getSessionUser } from '@/config';
+import { getPrisma, getSessionUser } from "@/config";
 
-import { NextRequest } from 'next/server';
+import { NextRequest } from "next/server";
 
 export async function GET(request: NextRequest) {
-  const keyword = request.nextUrl.searchParams.get('keyword');
+  const keyword = request.nextUrl.searchParams.get("keyword");
+  const offset = parseInt(request.nextUrl.searchParams.get("offset") || "0");
+  const limit = parseInt(request.nextUrl.searchParams.get("limit") || "10");
   const search = {
     ...(keyword
       ? {
@@ -20,6 +22,8 @@ export async function GET(request: NextRequest) {
     include: {
       user: true,
     },
+    take: limit,
+    skip: offset,
   });
 
   return Response.json(res);

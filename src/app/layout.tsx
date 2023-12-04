@@ -1,9 +1,23 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Merriweather, Roboto } from "next/font/google";
 import "./globals.css";
 import { AppProvider } from "@/providers";
 
-const inter = Inter({ subsets: ["latin"] });
+// const inter = Inter({ subsets: ["latin"] });
+
+export const merriweather = Merriweather({
+  subsets: ["latin"],
+  display: "swap",
+  weight: "400",
+  variable: "--font-merriweather",
+});
+
+export const roboto = Roboto({
+  subsets: ["latin"],
+  display: "swap",
+  weight: "400",
+  variable: "--font-roboto",
+});
 
 export const metadata: Metadata = {
   title: "My Blog",
@@ -17,7 +31,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={inter.className}>
+      <body className={merriweather.className}>
         <AppProvider>{children}</AppProvider>
       </body>
     </html>

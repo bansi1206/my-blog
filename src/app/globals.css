@@ -2,6 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+  --font-roboto: "Roboto", sans-serif;
+}
+
 *,
 ::before,
 ::after {
@@ -19,4 +23,49 @@
 * {
   margin: 0;
   padding: 0;
+}
+
+.ant-pagination-next button {
+  display: none !important;
+}
+
+.ant-pagination-prev button {
+  display: none !important;
+}
+
+.ant-pagination li {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+.ant-pagination {
+  display: flex !important;
+  align-items: end !important;
+}
+
+.ant-pagination-options {
+  display: none !important;
+}
+
+.ant-pagination-item {
+  border-radius: 50% !important;
+  width: 42px !important;
+  height: 42px !important;
+  background-color: #f5f5f5 !important;
+}
+
+.ant-pagination-item a {
+  color: #605c59 !important;
+  font-size: 16px !important;
+  font-weight: 700 !important;
+  line-height: 160% !important;
+}
+
+.ant-pagination-item-active {
+  background-color: #000638 !important;
+  border: none !important;
+}
+
+.ant-pagination-item-active a {
+  color: #fff !important;
 }

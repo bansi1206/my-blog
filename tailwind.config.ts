@@ -11,7 +11,11 @@ const config: Config = {
         primary: "#000638",
       },
       boxShadow: {
-        primary: "0px 5px 10px 0px rgba(0, 0, 0, 0.50);",
+        post: "0px 5px 10px 0px rgba(0, 0, 0, 0.50);",
+      },
+      fontFamily: {
+        merriweather: ["var(--font-merriweather"],
+        roboto: ["var(--font-roboto)", "sans-serif"],
       },
     },
   },

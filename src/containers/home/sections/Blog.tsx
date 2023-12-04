@@ -1,60 +1,79 @@
 "use client";
 
-import { Avatar } from "antd";
+import { Avatar, Pagination } from "antd";
 import Link from "next/link";
 import { map } from "lodash";
-import { useCallback } from "react";
+import { useCallback, useEffect, useMemo } from "react";
+import { formatDate } from "@/utils";
+import { useRouter, useSearchParams } from "next/navigation";
 
 type Props = {
   posts: any;
 };
 
+const LIMIT = 2;
+const ITEMS_PER_PAGE = 2;
+
 export const Blog: React.FC<Props> = ({ posts }) => {
-  const formatDate = useCallback((dateString: string) => {
-    const options: Intl.DateTimeFormatOptions = {
-      month: "short",
-      day: "numeric",
-      year: "numeric" as const,
-    };
-    return new Date(dateString).toLocaleDateString("en-US", options);
-  }, []);
+  console.log(posts);
+  const router = useRouter();
+  const search = useSearchParams();
+  const page = useMemo(
+    () => (search.get("page") ? parseInt(search.get("page") as string) : 1),
+    [search]
+  );
 
   return (
     <div className="mt-20 mb-40">
       <div className="container">
-        <div className="grid grid-cols-3 gap-4">
+        <div className="flex gap-4 flex-wrap justify-between max-w-full mb-[152px]">
           {map(posts, (post) => (
-            <Link key={post?.id} href={`/post/${post?.id}`} className="no-underline text-[#000]">
-              <div className="w-[510px] flex flex-col gap-y-5">
+            <Link
+              key={post?.id}
+              href={`/post/${post?.id}`}
+              className="no-underline text-[#000] "
+            >
+              <div className="w-[510px]">
                 <img
-                  src="https://images.pexels.com/photos/36744/agriculture-arable-clouds-countryside.jpg?auto=compress&cs=tinysrgb&w=1600"
+                  src={`${post.thumbnail}`}
                   alt="blog-image"
-                  className="rounded w-[510px] h-[278px]"
+                  className="rounded-[5px] w-[510px] h-[278px] mb-[21px] bg-no-repeat bg-cover"
                 />
-                <div className="rounded-sm bg-[#283A61] w-[73px] text-[white] p-1 text-center">
+                <div className="rounded-[3px] bg-[#283A61] w-[73px] text-[#FFFFFFD9] p-1 text-center mb-[8px] font-roboto">
                   {post?.category}
                 </div>
                 <h3 className="text-[#000] text-2xl font-bold mb-0">
                   {post?.title}
                 </h3>
-                <div className="text-sm font-normal text-[#515151] mt-0">
+                <div className="text-sm font-normal text-[#515151] mt-0 mb-[15px]">
                   {formatDate(post?.createdAt)}
                 </div>
                 <p
-                  className="text-base font-normal line-clamp-1"
+                  className="text-base font-normal line-clamp-3 font-roboto text-[#434343] mb-4"
                   dangerouslySetInnerHTML={{ __html: post?.content || "" }}
                 ></p>
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-[14px]">
                   <Avatar
-                    src="https://kenh14cdn.com/203336854389633024/2021/8/15/photo-1-162903403632824547336.jpg"
+                    src={`${post?.user.image}`}
                     alt="avatar"
+                    className="bg-cover bg-no-repeat rounded-[387px] w-[42px] h-[42px]"
                   />
-                  <p>Thang Le</p>
+                  <p className="text-sm font-bold text-[#000]">
+                    {post?.user.name}
+                  </p>
                 </div>
               </div>
             </Link>
           ))}
         </div>
+        <Pagination
+          current={page}
+          total={50}
+          pageSize={ITEMS_PER_PAGE}
+          pageSizeOptions={[]}
+          onChange={(page) => router.push(`?page=${page}`)}
+          className="flex justify-center"
+        />
       </div>
     </div>
   );

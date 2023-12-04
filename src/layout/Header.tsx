@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { signIn, signOut, useSession } from "next-auth/react";
-import { Avatar, Dropdown } from "antd";
+import { Avatar, Button, Dropdown } from "antd";
 
 type Props = {};
 
@@ -12,9 +12,27 @@ export const Header: React.FC<Props> = () => {
     <div className="mt-[64px]">
       <div className="container flex items-center justify-between">
         <Link href={"/"} className="no-underline">
-          <h3 className="text-primary text-lg font-black">My Blog</h3>
+          <h3 className="text-primary text-2xl font-black">My Blog</h3>
         </Link>
-        <div>
+        <div className="flex items-center gap-5">
+          <Link
+            href={"#!"}
+            className="text-[#605C59] text-lg no-underline font-roboto"
+          >
+            Blog
+          </Link>
+          <Link
+            href={"#!"}
+            className="text-[#605C59] text-lg no-underline font-roboto"
+          >
+            About
+          </Link>
+          <Link
+            href={"#!"}
+            className="text-[#605C59] text-lg no-underline font-roboto"
+          >
+            Contact
+          </Link>
           {user ? (
             <Dropdown
               menu={{
@@ -36,24 +54,14 @@ export const Header: React.FC<Props> = () => {
               </div>
             </Dropdown>
           ) : (
-            <div
-              className="cursor-pointer"
+            <Button
+              type="primary"
+              className="bg-[#000638] rounded-[5px]"
               onClick={() => signIn("google", { callbackUrl: "/" })}
             >
               Login
-            </div>
+            </Button>
           )}
-        </div>
-        <div className="flex items-center gap-5">
-          <Link href={"#!"} className="text-gray-700 no-underline">
-            Blog
-          </Link>
-          <Link href={"#!"} className="text-gray-700 no-underline">
-            About
-          </Link>
-          <Link href={"#!"} className="text-gray-700 no-underline">
-            Contact
-          </Link>
         </div>
       </div>
     </div>

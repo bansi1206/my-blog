@@ -64,6 +64,7 @@ model User {
   status        UserStatus @default(Actived)
   createdAt     DateTime   @default(now())
   updatedAt     DateTime   @updatedAt
+  bio           String?
 
   accounts Account[]
   sessions Session[]
@@ -81,7 +82,7 @@ model VerificationToken {
 model Post {
   id            String     @id @default(cuid())
   userId        String
-  image         String?
+  thumbnail     String?
   category      String?
   title         String?
   content       String?
