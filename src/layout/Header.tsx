@@ -3,36 +3,21 @@
 import Link from "next/link";
 import { signIn, signOut, useSession } from "next-auth/react";
 import { Avatar, Button, Dropdown } from "antd";
+import { useRouter } from "next/navigation";
 
 type Props = {};
 
 export const Header: React.FC<Props> = () => {
   const { data: user } = useSession();
+  const router = useRouter();
+  console.log(user);
   return (
     <div className="mt-[64px]">
-      <div className="container flex items-center justify-between">
+      <div className="container flex items-center justify-between max-w-[1100px]">
         <Link href={"/"} className="no-underline">
           <h3 className="text-primary text-2xl font-black">My Blog</h3>
         </Link>
-        <div className="flex items-center gap-5">
-          <Link
-            href={"#!"}
-            className="text-[#605C59] text-lg no-underline font-roboto"
-          >
-            Blog
-          </Link>
-          <Link
-            href={"#!"}
-            className="text-[#605C59] text-lg no-underline font-roboto"
-          >
-            About
-          </Link>
-          <Link
-            href={"#!"}
-            className="text-[#605C59] text-lg no-underline font-roboto"
-          >
-            Contact
-          </Link>
+        <div className="flex gap-6">
           {user ? (
             <Dropdown
               menu={{
@@ -61,6 +46,30 @@ export const Header: React.FC<Props> = () => {
             >
               Login
             </Button>
+          )}
+          {user &&
+          (user?.user?.role === "Admin" ||
+            user?.user?.role === "SuperAdmin") ? (
+            <Dropdown
+              menu={{
+                items: [
+                  {
+                    key: "1",
+                    label: "Add Post",
+                    onClick: () => router.push("/admin/manage-post"),
+                  },
+                  {
+                    key: "2",
+                    label: "Add Category",
+                    onClick: () => router.push("/admin/manage-category"),
+                  },
+                ],
+              }}
+            >
+              <div className="cursor-pointer flex items-center gap-1">Add</div>
+            </Dropdown>
+          ) : (
+            <div></div>
           )}
         </div>
       </div>

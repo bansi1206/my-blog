@@ -10,7 +10,7 @@ type Post = {
   id: string;
   userId: string;
   thumbnail: string;
-  category: string;
+  cat: Category;
   title: string;
   content: string;
   createdAt: string;
@@ -31,17 +31,23 @@ type User = {
   bio: string;
 };
 
+type Category = {
+  id: string;
+  title: string;
+};
+
 type Props = {
   post?: Post;
 };
 
 export const Post: React.FC<Props> = ({ post }) => {
+  console.log(post);
   return (
     <div>
-      <div className="container mt-[108px]">
+      <div className="container mt-[108px] max-w-[1100px]">
         <div className="max-w-[800px] m-auto">
           <div className="rounded bg-[#283A61] inline-block py-1 px-4 text-[#FFFFFFD9]">
-            {post?.category}
+            {post?.cat?.title}
           </div>
           <h1 className="text-5xl font-bold mt-3 mb-4">{post?.title}</h1>
           <p className="text-sm text-[#515151] mb-3">
@@ -61,7 +67,7 @@ export const Post: React.FC<Props> = ({ post }) => {
             <p className="text-sm font-bold text-[#000]">{post?.user.name}</p>
           </div>
           <div
-            className="text-base font-normal line-clamp-3 font-roboto text-[#434343] mt-10"
+            className="text-base font-normal font-roboto text-[#434343] mt-10"
             dangerouslySetInnerHTML={{ __html: post?.content || "" }}
           ></div>
           <KeepReading post={post} />

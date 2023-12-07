@@ -7,7 +7,7 @@ type Props = {};
 export const Footer: React.FC<Props> = () => {
   return (
     <div className="bg-gray-200 py-9">
-      <div className="container flex flex-col items-center gap-y-7">
+      <div className="container flex flex-col items-center gap-y-7 max-w-[1100px]">
         <div className="flex items-center gap-5">
           <Link
             href={"#!"}

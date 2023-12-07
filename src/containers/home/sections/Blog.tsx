@@ -15,18 +15,19 @@ const LIMIT = 2;
 const ITEMS_PER_PAGE = 2;
 
 export const Blog: React.FC<Props> = ({ posts }) => {
-  console.log(posts);
   const router = useRouter();
   const search = useSearchParams();
   const page = useMemo(
-    () => (search.get("page") ? parseInt(search.get("page") as string) : 1),
+    () => (search?.get("page") ? parseInt(search.get("page") as string) : 1),
     [search]
   );
+
+  console.log(posts);
 
   return (
     <div className="mt-20 mb-40">
       <div className="container">
-        <div className="flex gap-4 flex-wrap justify-between max-w-full mb-[152px]">
+        <div className="grid grid-cols-2 gap-20 max-w-full mb-[152px]">
           {map(posts, (post) => (
             <Link
               key={post?.id}
@@ -35,12 +36,12 @@ export const Blog: React.FC<Props> = ({ posts }) => {
             >
               <div className="w-[510px]">
                 <img
-                  src={`${post.thumbnail}`}
+                  src={`${post?.thumbnail}`}
                   alt="blog-image"
                   className="rounded-[5px] w-[510px] h-[278px] mb-[21px] bg-no-repeat bg-cover"
                 />
                 <div className="rounded-[3px] bg-[#283A61] w-[73px] text-[#FFFFFFD9] p-1 text-center mb-[8px] font-roboto">
-                  {post?.category}
+                  {post?.cat?.title}
                 </div>
                 <h3 className="text-[#000] text-2xl font-bold mb-0">
                   {post?.title}
@@ -54,12 +55,12 @@ export const Blog: React.FC<Props> = ({ posts }) => {
                 ></p>
                 <div className="flex items-center gap-[14px]">
                   <Avatar
-                    src={`${post?.user.image}`}
+                    src={`${post?.user?.image}`}
                     alt="avatar"
                     className="bg-cover bg-no-repeat rounded-[387px] w-[42px] h-[42px]"
                   />
                   <p className="text-sm font-bold text-[#000]">
-                    {post?.user.name}
+                    {post?.user?.name}
                   </p>
                 </div>
               </div>

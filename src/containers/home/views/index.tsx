@@ -29,7 +29,7 @@ export const Home: React.FC<Props> = ({ posts }) => {
 
   return (
     <div className="mt-[108px] mb-[10px]">
-      <div className="container">
+      <div className="container max-w-[1100px]">
         <h1 className="text-primary text-5xl font-black mb-0 text-center">
           My Blog
         </h1>
@@ -38,7 +38,7 @@ export const Home: React.FC<Props> = ({ posts }) => {
         </p>
         <div className="flex justify-center p-4">
           <Input
-            className="rounded-[5px] py-[18px] px-[28px]"
+            className="rounded-[5px] py-[18px] px-[28px] search"
             placeholder="Search for articles"
             style={{ width: "430px" }}
             size="large"

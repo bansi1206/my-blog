@@ -6,6 +6,7 @@ export async function GET(request: NextRequest) {
   const keyword = request.nextUrl.searchParams.get("keyword");
   const offset = parseInt(request.nextUrl.searchParams.get("offset") || "0");
   const limit = parseInt(request.nextUrl.searchParams.get("limit") || "10");
+  const prisma = getPrisma();
   const search = {
     ...(keyword
       ? {
@@ -15,12 +16,14 @@ export async function GET(request: NextRequest) {
         }
       : {}),
   };
-  const res = await getPrisma().post.findMany({
+  const total = await prisma.post.count();
+  const res = await prisma.post.findMany({
     where: {
       AND: [{ ...search }],
     },
     include: {
       user: true,
+      cat: true,
     },
     take: limit,
     skip: offset,
@@ -32,6 +35,7 @@ export async function GET(request: NextRequest) {
 export async function POST(request: NextRequest) {
   const data = await request.json();
   const session = await getSessionUser();
+
   const res = await getPrisma().post.create({
     data: {
       ...data,
@@ -42,7 +46,6 @@ export async function POST(request: NextRequest) {
       },
     },
   });
-
   return Response.json(res);
 }
 

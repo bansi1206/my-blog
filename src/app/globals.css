@@ -52,6 +52,7 @@
   width: 42px !important;
   height: 42px !important;
   background-color: #f5f5f5 !important;
+  transition: 0.2s ease-in-out !important;
 }
 
 .ant-pagination-item a {
@@ -61,6 +62,14 @@
   line-height: 160% !important;
 }
 
+.ant-pagination-item:hover {
+  background-color: #000638 !important;
+}
+
+.ant-pagination-item a:hover {
+  color: #fff !important;
+}
+
 .ant-pagination-item-active {
   background-color: #000638 !important;
   border: none !important;
@@ -68,4 +77,27 @@
 
 .ant-pagination-item-active a {
   color: #fff !important;
+}
+
+.ant-btn:hover {
+  background-color: #000638 !important;
+  opacity: 0.7 !important;
+}
+
+.ant-input:hover,
+.search:hover {
+  outline: none;
+  border-color: #000 !important;
+}
+
+.ant-input:focus {
+  outline: none !important;
+  border-color: #000 !important;
+  box-shadow: none !important;
+}
+
+.ant-input-affix-wrapper-focused {
+  outline: none !important;
+  border-color: #000 !important;
+  box-shadow: none !important;
 }

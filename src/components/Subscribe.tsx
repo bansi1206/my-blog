@@ -1,10 +1,44 @@
 "use client";
 
+import { useState } from "react";
 import { Button, Input } from "antd";
+import emailjs from "@emailjs/browser";
 
 type Props = {};
 
 export const Subscribe: React.FC<Props> = () => {
+  const [email, setEmail] = useState<string>("");
+
+  const sendEmail = () => {
+    const templateParams = {
+      from_name: "My Blog",
+      to_name: email,
+      message: "Thank you for subscribing!",
+    };
+
+    emailjs
+      .send(
+        "service_o9b20ah",
+        "template_az88u2d",
+        templateParams,
+        "DRF1f4zxgWlT-Bchp"
+      )
+      .then(
+        (response) => {
+          console.log("Email sent successfully:", response);
+        },
+        (error) => {
+          console.error("Email failed to send:", error);
+        }
+      );
+  };
+
+  const handleSubscribe = () => {
+    if (email) {
+      sendEmail();
+    }
+  };
+
   return (
     <div>
       <div className="container ">
@@ -22,10 +56,13 @@ export const Subscribe: React.FC<Props> = () => {
             className="w-full rounded-[3px]"
             placeholder="Email"
             size="large"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
           />
           <Button
             type="primary"
             className="max-w-[99px] bg-primary rounded-[3px] py-[9px] px-[18px] flex items-center justify-center"
+            onClick={handleSubscribe}
           >
             Sign Up
           </Button>

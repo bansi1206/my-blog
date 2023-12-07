@@ -83,13 +83,22 @@ model Post {
   id            String     @id @default(cuid())
   userId        String
   thumbnail     String?
-  category      String?
+  catId      String?
   title         String?
   content       String?
   createdAt     DateTime   @default(now())
   updatedAt     DateTime   @updatedAt
 
-  user          User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user          User?       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  cat          Category?       @relation(fields: [catId], references: [id], onDelete: Cascade)
 
   @@index([userId])
+  @@index([catId])
+}
+
+model Category {
+  id            String     @id @default(cuid())
+  title         String?     @default("")
+
+  posts         Post[]
 }
