@@ -1,8 +1,9 @@
 "use client";
 
 import { UserRole } from "@prisma/client";
-import { Result, Spin } from "antd";
+import { Result, Spin, message } from "antd";
 import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 import { useMemo } from "react";
 
 type Props = {
@@ -10,8 +11,9 @@ type Props = {
   roles?: UserRole[];
 };
 
-export const PrivateRouter: React.FC<Props> = ({ children, roles }) => {
+export const PrivateRouter: React.FC<Props> = ({ children, roles }): any => {
   const { data: user, status } = useSession();
+  const router = useRouter();
 
   const noPermission = useMemo(
     () =>
@@ -26,6 +28,12 @@ export const PrivateRouter: React.FC<Props> = ({ children, roles }) => {
         <Spin />
       </div>
     );
+  } else if (status === "unauthenticated") {
+    message.error("You must login to use this function!");
+    const interval = setInterval(() => {
+      router.push("/");
+    }, 3000);
+    return () => clearInterval(interval);
   }
 
   if (noPermission) {

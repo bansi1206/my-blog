@@ -18,7 +18,7 @@ export const ManagePost: React.FC<Props> = () => {
       try {
         const body = {
           title: values?.title,
-          catId: values?.category,
+          catId: values?.catId,
           thumbnail: values?.thumbnail,
           content: editorRef.current.getContent(),
           createdAt: new Date(),
@@ -47,7 +47,7 @@ export const ManagePost: React.FC<Props> = () => {
           <Form.Item label="Title" name="title">
             <Input />
           </Form.Item>
-          <Form.Item label="Category" name="category">
+          <Form.Item label="Category" name="catId">
             <Category />
           </Form.Item>
           <Form.Item label="Thumbnail" name="thumbnail">

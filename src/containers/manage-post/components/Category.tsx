@@ -18,7 +18,7 @@ export const Category: React.FC = () => {
         const data = await response.json();
 
         const options = data.map((category: Category) => ({
-          value: category?.title,
+          value: category?.id,
           label: category?.title,
         }));
         setCategories(options);
