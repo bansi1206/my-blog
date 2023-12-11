@@ -1,6 +1,6 @@
-import { getPrisma } from './prisma';
-import { cookies } from 'next/headers';
-import { UserRole, UserStatus } from '@prisma/client';
+import { getPrisma } from "./prisma";
+import { cookies } from "next/headers";
+import { UserRole, UserStatus } from "@prisma/client";
 
 export class AuthUser {
   id!: string;
@@ -11,7 +11,7 @@ export class AuthUser {
   image!: string | null;
 }
 
-declare module 'next' {
+declare module "next" {
   interface NextApiRequest {
     user: AuthUser;
   }
@@ -20,8 +20,8 @@ declare module 'next' {
 export async function getSessionUser(): Promise<AuthUser | null> {
   const cookieStore = cookies();
   const tokenCookie =
-    cookieStore.get('next-auth.session-token') ||
-    cookieStore.get('__Secure-next-auth.session-token');
+    cookieStore.get("next-auth.session-token") ||
+    cookieStore.get("__Secure-next-auth.session-token");
   if (!tokenCookie || !tokenCookie.value) return null;
   const user = await getPrisma().user.findFirst({
     where: {

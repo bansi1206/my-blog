@@ -16,7 +16,11 @@ export async function GET(request: NextRequest) {
         }
       : {}),
   };
-  const total = await prisma.post.count();
+  const total = await prisma.post.count({
+    where: {
+      AND: [{ ...search }],
+    },
+  });
   const res = await prisma.post.findMany({
     where: {
       AND: [{ ...search }],
@@ -29,24 +33,33 @@ export async function GET(request: NextRequest) {
     skip: offset,
   });
 
-  return Response.json(res);
+  return Response.json({
+    data: res,
+    total,
+  });
 }
 
 export async function POST(request: NextRequest) {
-  const data = await request.json();
-  const session = await getSessionUser();
+  try {
+    const data = await request.json();
+    const session = await getSessionUser();
 
-  const res = await getPrisma().post.create({
-    data: {
-      ...data,
-      user: {
-        connect: {
-          id: session?.id,
+    const res = await getPrisma().post.create({
+      data: {
+        ...data,
+        user: {
+          connect: {
+            id: session?.id,
+          },
         },
       },
-    },
-  });
-  return Response.json(res);
+    });
+
+    return Response.json(res);
+  } catch (error) {
+    console.error("Error creating post:", error);
+    return Response.json({ error: "Error creating post" }, { status: 500 });
+  }
 }
 
 export async function PUT(request: NextRequest) {

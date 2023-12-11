@@ -10,7 +10,7 @@ export const Main: React.FC<Props> = ({ children }) => {
   return (
     <div>
       <Header />
-      {children}
+      <div className="min-h-[calc(100vh-96px-140px)]">{children}</div>
       <Footer />
     </div>
   );

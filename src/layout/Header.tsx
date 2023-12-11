@@ -4,6 +4,7 @@ import Link from "next/link";
 import { signIn, signOut, useSession } from "next-auth/react";
 import { Avatar, Button, Dropdown } from "antd";
 import { useRouter } from "next/navigation";
+import { DownOutlined } from "@ant-design/icons";
 
 type Props = {};
 
@@ -12,7 +13,7 @@ export const Header: React.FC<Props> = () => {
   const router = useRouter();
   console.log(user);
   return (
-    <div className="mt-[64px]">
+    <div className="pt-[64px]">
       <div className="container flex items-center justify-between max-w-[1100px]">
         <Link href={"/"} className="no-underline">
           <h3 className="text-primary text-2xl font-black">My Blog</h3>
@@ -66,7 +67,9 @@ export const Header: React.FC<Props> = () => {
                 ],
               }}
             >
-              <div className="cursor-pointer flex items-center gap-1">Add</div>
+              <div className="cursor-pointer flex items-center gap-1">
+                Add <DownOutlined style={{ fontSize: "50%" }} />
+              </div>
             </Dropdown>
           ) : (
             <div></div>

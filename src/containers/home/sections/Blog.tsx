@@ -17,18 +17,19 @@ const ITEMS_PER_PAGE = 2;
 export const Blog: React.FC<Props> = ({ posts }) => {
   const router = useRouter();
   const search = useSearchParams();
+  const keyword = useMemo(() => search?.get("keyword") || "", [search]);
   const page = useMemo(
     () => (search?.get("page") ? parseInt(search.get("page") as string) : 1),
     [search]
   );
 
-  console.log(posts);
+  console.log(posts.total);
 
   return (
     <div className="mt-20 mb-40">
       <div className="container">
         <div className="grid grid-cols-2 gap-20 max-w-full mb-[152px]">
-          {map(posts, (post) => (
+          {map(posts.data, (post) => (
             <Link
               key={post?.id}
               href={`/post/${post?.id}`}
@@ -38,7 +39,7 @@ export const Blog: React.FC<Props> = ({ posts }) => {
                 <img
                   src={`${post?.thumbnail}`}
                   alt="blog-image"
-                  className="rounded-[5px] w-[510px] h-[278px] mb-[21px] bg-no-repeat bg-cover"
+                  className="rounded-[5px] w-[510px] h-[278px] mb-[21px] object-cover"
                 />
                 <div className="rounded-[3px] bg-[#283A61] w-[73px] text-[#FFFFFFD9] p-1 text-center mb-[8px] font-roboto">
                   {post?.cat?.title}
@@ -69,10 +70,10 @@ export const Blog: React.FC<Props> = ({ posts }) => {
         </div>
         <Pagination
           current={page}
-          total={50}
+          total={posts.total}
           pageSize={ITEMS_PER_PAGE}
           pageSizeOptions={[]}
-          onChange={(page) => router.push(`?page=${page}`)}
+          onChange={(page) => router.push(`?keyword=${keyword}&page=${page}`)}
           className="flex justify-center"
         />
       </div>

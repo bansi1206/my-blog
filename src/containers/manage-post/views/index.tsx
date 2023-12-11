@@ -2,27 +2,94 @@
 
 import { Button, Form, Input, message } from "antd";
 import { Editor } from "@tinymce/tinymce-react";
-import { useCallback, useRef } from "react";
-
+import { useCallback, useEffect, useRef, useState } from "react";
 import axios from "axios";
-import { Category, Thumbnail } from "../components";
+import { Thumbnail } from "../components";
+import { Select } from "antd";
+
+type Category = {
+  id: string;
+  title: string;
+  value: string;
+  label: string;
+};
 
 type Props = {};
 
 export const ManagePost: React.FC<Props> = () => {
   const [form] = Form.useForm();
   const editorRef = useRef<any>();
+  const [categories, setCategories] = useState<Category[]>([]);
+  const [selectedTags, setSelectedTags] = useState<Category[]>([]);
+
+  const uploadToImgBB = async (file: File) => {
+    try {
+      const formData = new FormData();
+      formData.append("image", file);
+      formData.append("key", "6411f8344d5253b810b283866f55558c");
+
+      const response = await axios.post(
+        "https://api.imgbb.com/1/upload",
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+
+      return response.data.data.url;
+    } catch (error) {
+      console.error("Error uploading image to ImgBB:", error);
+      throw error;
+    }
+  };
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch("/api/category");
+        const data = await response.json();
+
+        const options = data.map((category: Category) => ({
+          value: category?.id,
+          label: category?.title,
+        }));
+        setCategories(options);
+      } catch (error) {
+        console.error("Error fetching categories:", error);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  const onChange = (selectedValues: string[]) => {
+    const selectedCategories = categories.filter((category) =>
+      selectedValues.includes(category.value)
+    );
+    setSelectedTags(selectedCategories);
+    console.log("categories", selectedTags);
+  };
+
+  const onSearch = (value: string) => {
+    console.log("search:", value);
+  };
+
+  const filterOption = (input: string, option?: { label: string }) =>
+    (option?.label ?? "").toLowerCase().includes(input.toLowerCase());
 
   const onFinish = useCallback(
     async (values: any) => {
       try {
+        const thumbnailUrl = await uploadToImgBB(values.thumbnail);
         const body = {
           title: values?.title,
-          catId: values?.catId,
-          thumbnail: values?.thumbnail,
+          cat: "",
+          thumbnail: thumbnailUrl,
           content: editorRef.current.getContent(),
           createdAt: new Date(),
         };
+        console.log(body);
 
         await axios.post("/api/post", body);
 
@@ -30,13 +97,14 @@ export const ManagePost: React.FC<Props> = () => {
 
         form.resetFields();
         editorRef.current.setContent("");
+        setSelectedTags([]);
       } catch (error) {
         console.error("Error submitting form:", error);
 
         message.error("Something Wrong!");
       }
     },
-    [form]
+    [form, selectedTags]
   );
 
   return (
@@ -48,7 +116,16 @@ export const ManagePost: React.FC<Props> = () => {
             <Input />
           </Form.Item>
           <Form.Item label="Category" name="catId">
-            <Category />
+            <Select
+              mode="multiple"
+              showSearch
+              placeholder="Select a category"
+              optionFilterProp="children"
+              onChange={onChange}
+              onSearch={onSearch}
+              filterOption={filterOption}
+              options={categories}
+            />
           </Form.Item>
           <Form.Item label="Thumbnail" name="thumbnail">
             <Thumbnail />

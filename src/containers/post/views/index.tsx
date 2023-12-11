@@ -5,6 +5,7 @@ import { Avatar, Button } from "antd";
 import { Popular, Subscribe, Recent } from "@/components";
 import { formatDate } from "@/utils";
 import { KeepReading } from "@/components";
+import { Comments, FacebookProvider } from "react-facebook";
 
 type Post = {
   id: string;
@@ -56,7 +57,7 @@ export const Post: React.FC<Props> = ({ post }) => {
           <img
             src={`${post?.thumbnail}`}
             alt="post-image"
-            className="rounded-[5px] h-[278px] w-full shadow-post bg-[#7f7f7f] bg-no-repeat bg-cover"
+            className="rounded-[5px] h-[278px] w-full shadow-post bg-[#7f7f7f] object-cover"
           />
           <div className="flex items-center gap-[14px] mt-[20px]">
             <Avatar
@@ -85,6 +86,9 @@ export const Post: React.FC<Props> = ({ post }) => {
             </div>
           </div>
         </div>
+        <FacebookProvider appId="1473682613178203">
+          <Comments href={`www.facebook.com/post/${post?.id}`} />
+        </FacebookProvider>
         <div className="max-lg:flex max-lg:flex-col max-lg:gap-6 max-lg:ml-0 lg:flex justify-between mb-[147px] lg:gap-20">
           <Subscribe />
           <Popular />

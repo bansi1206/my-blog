@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Button, Input } from "antd";
+import { Button, Input, message } from "antd";
 import emailjs from "@emailjs/browser";
 
 type Props = {};
@@ -36,6 +36,7 @@ export const Subscribe: React.FC<Props> = () => {
   const handleSubscribe = () => {
     if (email) {
       sendEmail();
+      message.success("Thank you for subscribing!");
     }
   };
 

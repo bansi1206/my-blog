@@ -53,7 +53,7 @@ export const KeepReading: React.FC<Props> = ({ post }) => {
                 <img
                   src={`${readingPost.thumbnail}`}
                   alt="blog-image"
-                  className="rounded-[5px] w-[250px] h-[165.339px] bg-no-repeat bg-cover shadow-post"
+                  className="rounded-[5px] w-[250px] h-[165.339px] object-cover shadow-post"
                 />
                 <div className="flex flex-col justify-center">
                   <h3 className="text-[#303030] text-2xl font-bold mb-2 line-clamp-2">
