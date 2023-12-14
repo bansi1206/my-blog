@@ -22,8 +22,8 @@ export const Blog: React.FC<Props> = ({ posts }) => {
     () => (search?.get("page") ? parseInt(search.get("page") as string) : 1),
     [search]
   );
-
   console.log(posts.total);
+  console.log(posts.data);
 
   return (
     <div className="mt-20 mb-40">
@@ -41,8 +41,15 @@ export const Blog: React.FC<Props> = ({ posts }) => {
                   alt="blog-image"
                   className="rounded-[5px] w-[510px] h-[278px] mb-[21px] object-cover"
                 />
-                <div className="rounded-[3px] bg-[#283A61] w-[73px] text-[#FFFFFFD9] p-1 text-center mb-[8px] font-roboto">
-                  {post?.cat?.title}
+                <div className="flex gap-3">
+                  {map(post?.categories, (categoryObj) => (
+                    <div
+                      key={categoryObj.category.id}
+                      className="rounded-[3px] bg-[#283A61] w-[73px] text-[#FFFFFFD9] p-1 text-center mb-[8px] font-roboto"
+                    >
+                      {categoryObj.category.title}
+                    </div>
+                  ))}
                 </div>
                 <h3 className="text-[#000] text-2xl font-bold mb-0">
                   {post?.title}

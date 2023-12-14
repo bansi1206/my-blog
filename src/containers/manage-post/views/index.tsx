@@ -22,28 +22,28 @@ export const ManagePost: React.FC<Props> = () => {
   const [categories, setCategories] = useState<Category[]>([]);
   const [selectedTags, setSelectedTags] = useState<Category[]>([]);
 
-  const uploadToImgBB = async (file: File) => {
-    try {
-      const formData = new FormData();
-      formData.append("image", file);
-      formData.append("key", "6411f8344d5253b810b283866f55558c");
+  // const uploadToImgBB = async (file: File) => {
+  //   try {
+  //     const formData = new FormData();
+  //     formData.append("image", file);
+  //     formData.append("key", "6411f8344d5253b810b283866f55558c");
 
-      const response = await axios.post(
-        "https://api.imgbb.com/1/upload",
-        formData,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        }
-      );
+  //     const response = await axios.post(
+  //       "https://api.imgbb.com/1/upload",
+  //       formData,
+  //       {
+  //         headers: {
+  //           "Content-Type": "multipart/form-data",
+  //         },
+  //       }
+  //     );
 
-      return response.data.data.url;
-    } catch (error) {
-      console.error("Error uploading image to ImgBB:", error);
-      throw error;
-    }
-  };
+  //     return response.data.data.url;
+  //   } catch (error) {
+  //     console.error("Error uploading image to ImgBB:", error);
+  //     throw error;
+  //   }
+  // };
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -63,29 +63,15 @@ export const ManagePost: React.FC<Props> = () => {
     fetchData();
   }, []);
 
-  const onChange = (selectedValues: string[]) => {
-    const selectedCategories = categories.filter((category) =>
-      selectedValues.includes(category.value)
-    );
-    setSelectedTags(selectedCategories);
-    console.log("categories", selectedTags);
-  };
-
-  const onSearch = (value: string) => {
-    console.log("search:", value);
-  };
-
-  const filterOption = (input: string, option?: { label: string }) =>
-    (option?.label ?? "").toLowerCase().includes(input.toLowerCase());
-
   const onFinish = useCallback(
     async (values: any) => {
+      console.log(values);
       try {
-        const thumbnailUrl = await uploadToImgBB(values.thumbnail);
+        // const thumbnailUrl = await uploadToImgBB(values.thumbnail);
         const body = {
           title: values?.title,
-          cat: "",
-          thumbnail: thumbnailUrl,
+          categories: values?.categoryId,
+          // thumbnail: thumbnailUrl,
           content: editorRef.current.getContent(),
           createdAt: new Date(),
         };
@@ -115,15 +101,11 @@ export const ManagePost: React.FC<Props> = () => {
           <Form.Item label="Title" name="title">
             <Input />
           </Form.Item>
-          <Form.Item label="Category" name="catId">
+          <Form.Item label="Category" name="categoryId">
             <Select
               mode="multiple"
               showSearch
               placeholder="Select a category"
-              optionFilterProp="children"
-              onChange={onChange}
-              onSearch={onSearch}
-              filterOption={filterOption}
               options={categories}
             />
           </Form.Item>

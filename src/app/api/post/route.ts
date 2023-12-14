@@ -27,7 +27,11 @@ export async function GET(request: NextRequest) {
     },
     include: {
       user: true,
-      cat: true,
+      categories: {
+        include: {
+          category: true,
+        },
+      },
     },
     take: limit,
     skip: offset,
@@ -43,7 +47,6 @@ export async function POST(request: NextRequest) {
   try {
     const data = await request.json();
     const session = await getSessionUser();
-
     const res = await getPrisma().post.create({
       data: {
         ...data,
@@ -52,13 +55,19 @@ export async function POST(request: NextRequest) {
             id: session?.id,
           },
         },
+        categories: {
+          create: data?.categories.map((categories: []) => ({
+            category: {
+              connect: { id: categories },
+            },
+          })),
+        },
       },
     });
 
     return Response.json(res);
   } catch (error) {
     console.error("Error creating post:", error);
-    return Response.json({ error: "Error creating post" }, { status: 500 });
   }
 }
 

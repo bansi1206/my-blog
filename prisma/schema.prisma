@@ -81,23 +81,33 @@ model VerificationToken {
 
 model Post {
   id            String     @id @default(cuid())
-  userId        String
-  thumbnail     String?
-  cat          Category[]    
+  userId        String  
+  thumbnail     String?     
   title         String?
   content       String?
   createdAt     DateTime   @default(now())
   updatedAt     DateTime   @updatedAt
 
   user          User?       @relation(fields: [userId], references: [id], onDelete: Cascade)
-   
+ 
 
   @@index([userId])  
+  categories CategoriesOnPosts[]
 }
 
 model Category {
-  id            String     @id @default(cuid())
+   id            String     @id @default(cuid())
   title         String?     @default("")
+  posts CategoriesOnPosts[]
+}
 
-  posts         Post[]
+model CategoriesOnPosts {
+  post       Post     @relation(fields: [postId], references: [id])
+  postId     String // relation scalar field (used in the `@relation` attribute above)
+  category   Category @relation(fields: [categoryId], references: [id])
+  categoryId String // relation scalar field (used in the `@relation` attribute above)  
+
+  @@id([postId, categoryId])
+  @@index([postId])
+  @@index([categoryId])
 }
