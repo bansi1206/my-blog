@@ -15,7 +15,11 @@ export async function GET(
     },
     include: {
       user: true,
-      cat: true,
+      categories: {
+        include: {
+          category: true,
+        },
+      },
     },
   });
 

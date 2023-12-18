@@ -11,7 +11,6 @@ type Props = {};
 export const Header: React.FC<Props> = () => {
   const { data: user } = useSession();
   const router = useRouter();
-  console.log(user);
   return (
     <div className="pt-[64px]">
       <div className="container flex items-center justify-between max-w-[1100px]">

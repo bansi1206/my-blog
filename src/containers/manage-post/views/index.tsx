@@ -1,11 +1,59 @@
 "use client";
 
-import { Button, Form, Input, message } from "antd";
+import { Button, Form, Input, message, Upload } from "antd";
 import { Editor } from "@tinymce/tinymce-react";
 import { useCallback, useEffect, useRef, useState } from "react";
 import axios from "axios";
-import { Thumbnail } from "../components";
 import { Select } from "antd";
+import { InboxOutlined } from "@ant-design/icons";
+import type { UploadProps } from "antd";
+
+const { Dragger } = Upload;
+
+const props: UploadProps = {
+  name: "file",
+  accept: "image/*",
+  multiple: false,
+  maxCount: 1,
+  customRequest: async ({ file, onSuccess }) => {
+    try {
+      const data = new FormData();
+      data.set("file", file);
+
+      const res = await fetch("/api/upload", {
+        method: "POST",
+        body: data,
+      });
+
+      if (!res.ok) {
+        throw new Error(await res.text());
+      }
+
+      const result = await res.json();
+      if (onSuccess) {
+        onSuccess(result);
+      }
+    } catch (error) {
+      console.error("Error uploading file:", error);
+      message.error(`file upload failed.`);
+    }
+  },
+  onChange(info) {
+    const { status } = info.file;
+    console.log(status);
+    if (status !== "uploading") {
+      console.log(info.file, info.fileList);
+    }
+    if (status === "done") {
+      message.success(`${info.file.name} file uploaded successfully.`);
+    } else if (status === "error") {
+      message.error(`${info.file.name} file upload failed.`);
+    }
+  },
+  onDrop(e) {
+    console.log("Dropped files", e.dataTransfer.files);
+  },
+};
 
 type Category = {
   id: string;
@@ -22,28 +70,6 @@ export const ManagePost: React.FC<Props> = () => {
   const [categories, setCategories] = useState<Category[]>([]);
   const [selectedTags, setSelectedTags] = useState<Category[]>([]);
 
-  // const uploadToImgBB = async (file: File) => {
-  //   try {
-  //     const formData = new FormData();
-  //     formData.append("image", file);
-  //     formData.append("key", "6411f8344d5253b810b283866f55558c");
-
-  //     const response = await axios.post(
-  //       "https://api.imgbb.com/1/upload",
-  //       formData,
-  //       {
-  //         headers: {
-  //           "Content-Type": "multipart/form-data",
-  //         },
-  //       }
-  //     );
-
-  //     return response.data.data.url;
-  //   } catch (error) {
-  //     console.error("Error uploading image to ImgBB:", error);
-  //     throw error;
-  //   }
-  // };
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -65,13 +91,12 @@ export const ManagePost: React.FC<Props> = () => {
 
   const onFinish = useCallback(
     async (values: any) => {
-      console.log(values);
+      console.log("values", values);
       try {
-        // const thumbnailUrl = await uploadToImgBB(values.thumbnail);
         const body = {
           title: values?.title,
           categories: values?.categoryId,
-          // thumbnail: thumbnailUrl,
+          thumbnail: `/uploads/${values?.thumbnail?.file?.name}`,
           content: editorRef.current.getContent(),
           createdAt: new Date(),
         };
@@ -98,10 +123,10 @@ export const ManagePost: React.FC<Props> = () => {
       <div className="container max-w-[800px] py-8">
         <h1>Add New Post</h1>
         <Form form={form} layout="vertical" onFinish={onFinish}>
-          <Form.Item label="Title" name="title">
-            <Input />
+          <Form.Item label="Title" name="title" required>
+            <Input required />
           </Form.Item>
-          <Form.Item label="Category" name="categoryId">
+          <Form.Item label="Category" name="categoryId" required>
             <Select
               mode="multiple"
               showSearch
@@ -109,10 +134,21 @@ export const ManagePost: React.FC<Props> = () => {
               options={categories}
             />
           </Form.Item>
-          <Form.Item label="Thumbnail" name="thumbnail">
-            <Thumbnail />
+          <Form.Item label="Thumbnail" name="thumbnail" required>
+            <Dragger {...props}>
+              <p className="ant-upload-drag-icon">
+                <InboxOutlined />
+              </p>
+              <p className="ant-upload-text">
+                Click or drag file to this area to upload
+              </p>
+              <p className="ant-upload-hint">
+                Support for a single or bulk upload. Strictly prohibited from
+                uploading company data or other banned files.
+              </p>
+            </Dragger>
           </Form.Item>
-          <Form.Item label="Content" name="content">
+          <Form.Item label="Content" name="content" required>
             <Editor
               apiKey="omhg3nhiridv2e2pukf95ka6a7go38hgh6yvee8dmxeolmr5"
               onInit={(evt, editor) => {

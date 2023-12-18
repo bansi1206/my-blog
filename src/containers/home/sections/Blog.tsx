@@ -45,7 +45,7 @@ export const Blog: React.FC<Props> = ({ posts }) => {
                   {map(post?.categories, (categoryObj) => (
                     <div
                       key={categoryObj.category.id}
-                      className="rounded-[3px] bg-[#283A61] w-[73px] text-[#FFFFFFD9] p-1 text-center mb-[8px] font-roboto"
+                      className="rounded-[3px] bg-[#283A61] w-[73px] text-[#FFFFFFD9] p-1 text-center mb-[8px]"
                     >
                       {categoryObj.category.title}
                     </div>
