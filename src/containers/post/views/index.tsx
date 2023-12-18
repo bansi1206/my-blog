@@ -52,12 +52,13 @@ export const Post: React.FC<Props> = ({ post }) => {
         <div className="max-w-[800px] m-auto">
           <div className="flex gap-3">
             {map(post?.categories, (category) => (
-              <div
+              <Link
+                href={`/find-post/${category?.category?.id}`}
                 key={category?.category?.id}
-                className="rounded bg-[#283A61] inline-block py-1 px-4 text-[#FFFFFFD9]"
+                className="rounded bg-[#283A61] inline-block py-1 px-4 text-[#FFFFFFD9] hover:opacity-70 no-underline"
               >
                 {category?.category?.title}
-              </div>
+              </Link>
             ))}
           </div>
           {/* <div className="rounded bg-[#283A61] inline-block py-1 px-4 text-[#FFFFFFD9]">
