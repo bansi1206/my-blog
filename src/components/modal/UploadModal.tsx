@@ -1,13 +1,13 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
-import { Button, message, Result, Upload } from "antd";
+import { Button, message, Upload } from "antd";
 import type { UploadProps } from "antd";
 import { InboxOutlined } from "@ant-design/icons";
 import axios from "axios";
 import { map } from "lodash";
 import "./UploadModal.css";
-import { useRecoilValue, useSetRecoilState } from "recoil";
+import { useSetRecoilState } from "recoil";
 import { thumbnailState } from "@/recoil";
 
 const { Dragger } = Upload;
@@ -24,7 +24,6 @@ export const UploadModal: React.FC<Props> = ({ open, onClose }) => {
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
   const [info, setInfo] = useState<any>(null);
   const setThumbnail = useSetRecoilState(thumbnailState);
-  const thumbnail = useRecoilValue(thumbnailState);
   const [upload, setUpload] = useState<any>("");
   const props: UploadProps = {
     name: "file",
@@ -64,18 +63,14 @@ export const UploadModal: React.FC<Props> = ({ open, onClose }) => {
       setImageList(res.data);
     };
     getImageList();
-  }, []);
+  }, [upload]);
 
   const handleSetThumbnail = useCallback(() => {
-    if (upload) {
-      setThumbnail(upload.name);
-      onClose();
-    } else if (info) {
+    if (info) {
       setThumbnail(info.name);
-      console.log(">>>set featured image", info.name);
       onClose();
     }
-  }, [upload, info]);
+  }, [info, setThumbnail, onClose]);
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-25 backdrop-blur-sm flex justify-center items-center z-[10] ">
