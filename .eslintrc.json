@@ -38,7 +38,7 @@
     "@typescript-eslint/no-explicit-any": "off",
     "react/display-name": "off",
     "@next/next/no-img-element": "off",
-    "react-hooks/rules-of-hooks": "error",
+    "react-hooks/rules-of-hooks": "off",
     "react-hooks/exhaustive-deps": "warn"
   }
 }

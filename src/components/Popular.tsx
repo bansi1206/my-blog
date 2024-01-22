@@ -12,7 +12,7 @@ export const Popular: React.FC<Props> = () => {
             <li>
               How To Have Your Cake and Eat It Too: The Way of The Chicken Man
             </li>
-            <li>My Grandma's 30-year-old Recipe</li>
+            <li>My Grandma&apos;s 30-year-old Recipe</li>
             <li>What I learned about cooking from Ratatoulie</li>
           </ul>
         </div>
