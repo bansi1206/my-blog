@@ -1,8 +1,6 @@
 import { getPrisma } from "@/config";
 
-import { NextRequest } from "next/server";
-
-export async function GET(request: NextRequest) {
+export async function GET() {
   const prisma = getPrisma();
 
   const res = await prisma.image.findMany();
