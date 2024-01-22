@@ -100,9 +100,11 @@ export const Post: React.FC<Props> = ({ post }) => {
             </div>
           </div>
         </div>
-        <FacebookProvider appId="1473682613178203">
-          <Comments href={`www.facebook.com/post/${post?.id}`} />
-        </FacebookProvider>
+        <div className="flex justify-center mb-3">
+          <FacebookProvider appId="1473682613178203">
+            <Comments href={`www.facebook.com/post/${post?.id}`} />
+          </FacebookProvider>
+        </div>
         <div className="max-lg:flex max-lg:flex-col max-lg:gap-6 max-lg:ml-0 lg:flex justify-between mb-[147px] lg:gap-20">
           <Subscribe />
           <Popular />

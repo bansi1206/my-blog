@@ -3,6 +3,7 @@
 import { Main } from "@/layout";
 import { QueryClient, QueryClientProvider } from "react-query";
 import { SessionProvider } from "next-auth/react";
+import { RecoilRoot } from "recoil";
 
 type Props = {
   children: React.ReactNode;
@@ -14,7 +15,9 @@ export const AppProvider: React.FC<Props> = ({ children }) => {
   return (
     <SessionProvider>
       <QueryClientProvider client={queryclient}>
-        <Main>{children}</Main>
+        <RecoilRoot>
+          <Main>{children}</Main>
+        </RecoilRoot>
       </QueryClientProvider>
     </SessionProvider>
   );

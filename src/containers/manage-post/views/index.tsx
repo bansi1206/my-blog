@@ -1,59 +1,14 @@
 "use client";
 
-import { Button, Form, Input, message, Upload } from "antd";
+import { Button, Form, Input, message } from "antd";
 import { Editor } from "@tinymce/tinymce-react";
 import { useCallback, useEffect, useRef, useState } from "react";
 import axios from "axios";
 import { Select } from "antd";
-import { InboxOutlined } from "@ant-design/icons";
-import type { UploadProps } from "antd";
-
-const { Dragger } = Upload;
-
-const props: UploadProps = {
-  name: "file",
-  accept: "image/*",
-  multiple: false,
-  maxCount: 1,
-  customRequest: async ({ file, onSuccess }) => {
-    try {
-      const data = new FormData();
-      data.set("file", file);
-
-      const res = await fetch("/api/upload", {
-        method: "POST",
-        body: data,
-      });
-
-      if (!res.ok) {
-        throw new Error(await res.text());
-      }
-
-      const result = await res.json();
-      if (onSuccess) {
-        onSuccess(result);
-      }
-    } catch (error) {
-      console.error("Error uploading file:", error);
-      message.error(`file upload failed.`);
-    }
-  },
-  onChange(info) {
-    const { status } = info.file;
-    console.log(status);
-    if (status !== "uploading") {
-      console.log(info.file, info.fileList);
-    }
-    if (status === "done") {
-      message.success(`${info.file.name} file uploaded successfully.`);
-    } else if (status === "error") {
-      message.error(`${info.file.name} file upload failed.`);
-    }
-  },
-  onDrop(e) {
-    console.log("Dropped files", e.dataTransfer.files);
-  },
-};
+import { UploadModal } from "@/components/modal";
+import { useRecoilValue } from "recoil";
+import { thumbnailState } from "@/recoil";
+import { PlusOutlined } from "@ant-design/icons";
 
 type Category = {
   id: string;
@@ -68,7 +23,10 @@ export const ManagePost: React.FC<Props> = () => {
   const [form] = Form.useForm();
   const editorRef = useRef<any>();
   const [categories, setCategories] = useState<Category[]>([]);
-  const [selectedTags, setSelectedTags] = useState<Category[]>([]);
+
+  const [isOpen, setIsOpen] = useState(false);
+  const thumbnail = useRecoilValue(thumbnailState);
+  console.log("after set feature image", thumbnail);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -91,12 +49,11 @@ export const ManagePost: React.FC<Props> = () => {
 
   const onFinish = useCallback(
     async (values: any) => {
-      console.log("values", values);
       try {
         const body = {
           title: values?.title,
           categories: values?.categoryId,
-          thumbnail: `/uploads/${values?.thumbnail?.file?.name}`,
+          thumbnail: `/uploads/${thumbnail}`,
           content: editorRef.current.getContent(),
           createdAt: new Date(),
         };
@@ -108,14 +65,13 @@ export const ManagePost: React.FC<Props> = () => {
 
         form.resetFields();
         editorRef.current.setContent("");
-        setSelectedTags([]);
       } catch (error) {
         console.error("Error submitting form:", error);
 
         message.error("Something Wrong!");
       }
     },
-    [form, selectedTags]
+    [form, thumbnail]
   );
 
   return (
@@ -135,18 +91,41 @@ export const ManagePost: React.FC<Props> = () => {
             />
           </Form.Item>
           <Form.Item label="Thumbnail" name="thumbnail" required>
-            <Dragger {...props}>
-              <p className="ant-upload-drag-icon">
-                <InboxOutlined />
-              </p>
-              <p className="ant-upload-text">
-                Click or drag file to this area to upload
-              </p>
-              <p className="ant-upload-hint">
-                Support for a single or bulk upload. Strictly prohibited from
-                uploading company data or other banned files.
-              </p>
-            </Dragger>
+            {!thumbnail ? (
+              <div
+                onClick={() => {
+                  setIsOpen(true);
+                }}
+                className="flex flex-col items-center bg-[#ccc] rounded-[3px] p-4 cursor-pointer hover:opacity-75"
+              >
+                <PlusOutlined />
+                Set Cover
+              </div>
+            ) : (
+              <div className="relative group w-[300px] h-[200px]">
+                <img
+                  src={`/uploads/${thumbnail}`}
+                  alt="Cover"
+                  className="w-full h-full object-cover rounded-[3px] group-hover:opacity-80 transition-opacity duration-300"
+                />
+                <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                  <div
+                    className="text-white bg-[#ccc] rounded-[3px] p-1 cursor-pointer"
+                    onClick={() => {
+                      setIsOpen(true);
+                    }}
+                  >
+                    Replace
+                  </div>
+                </div>
+              </div>
+            )}
+            <UploadModal
+              open={isOpen}
+              onClose={() => {
+                setIsOpen(false);
+              }}
+            />
           </Form.Item>
           <Form.Item label="Content" name="content" required>
             <Editor

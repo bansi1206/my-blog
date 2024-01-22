@@ -111,3 +111,11 @@ model CategoriesOnPosts {
   @@index([postId])
   @@index([categoryId])
 }
+
+model Image{
+  id            String     @id @default(cuid())
+  uid           String
+  name          String?
+  status        String
+  url           String
+}
